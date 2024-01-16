@@ -1,0 +1,113 @@
+<!-- Updated index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <title>Guna Predictor</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Guna Predictor</h1>
+        <form action="/predict" method="post">
+            {% for question in questions %}
+                <div class="question-container" id="question_{{ loop.index }}" {% if loop.index != 1 %}style="display: none;"{% endif %}>
+                    <label>{{ question }}</label>
+                    <input type="text" name="response_{{ loop.index }}" required id="answerInput_{{ loop.index }}"><br>
+                    <button type="button" onclick="backQuestion()" class="back-btn">Back</button>
+                    <button type="button" onclick="nextQuestion()" class="next-btn">Next</button>
+                </div>
+            {% endfor %}
+            <button type="button" onclick="confirmSubmission()" class="submit-btn" style="display: none;" id="submitBtn">Submit</button>
+        </form>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <script>
+        let currentQuestion = 1;
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault(); // prevent form submission
+                if (currentQuestion < 20) {
+                    nextQuestion();
+                } else {
+                    confirmSubmission();
+                }
+            } else if ((event.key === 'Enter' && event.shiftKey) || (event.key === 'ArrowLeft' && event.shiftKey)) {
+                event.preventDefault(); // prevent default behavior
+                confirmSubmission();
+            } else if (event.key === 'ArrowLeft' && !event.shiftKey) {
+                backQuestion();
+            }
+        });
+
+        function backQuestion() {
+            if (currentQuestion > 1) {
+                document.getElementById(`question_${currentQuestion}`).style.display = 'none';
+                currentQuestion--;
+                document.getElementById(`question_${currentQuestion}`).style.display = 'block';
+                updateButtonVisibility();
+                focusOnAnswerInput();
+            }
+        }
+
+        function nextQuestion() {
+            const currentAnswer = document.querySelector(`input[name="response_${currentQuestion}"]`).value;
+
+            // Check if the current answer is empty
+            if (!currentAnswer.trim()) {
+                alert('Please answer the current question before proceeding.');
+                return;
+            }
+
+            document.getElementById(`question_${currentQuestion}`).style.display = 'none';
+            currentQuestion++;
+
+            if (currentQuestion <= 20) {
+                document.getElementById(`question_${currentQuestion}`).style.display = 'block';
+                focusOnAnswerInput();
+            }
+
+            updateButtonVisibility();
+        }
+
+        function updateButtonVisibility() {
+            if (currentQuestion < 20) {
+                document.querySelector('.submit-btn').style.display = 'none';
+                document.querySelectorAll('.next-btn').forEach(btn => btn.style.display = 'inline-block');
+            } else {
+                document.querySelector('.submit-btn').style.display = 'inline-block';
+                document.querySelectorAll('.next-btn').forEach(btn => btn.style.display = 'none');
+            }
+        }
+
+        function focusOnAnswerInput() {
+            document.getElementById(`answerInput_${currentQuestion}`).focus();
+        }
+
+        function confirmSubmission() {
+            const confirmed = confirm('Are you sure you want to submit?');
+            if (confirmed) {
+                submitForm();
+            }
+        }
+
+        function submitForm() {
+            // Implement your form submission logic here
+            document.querySelector('form').submit();
+        }
+    </script>
+</body>
+</html>

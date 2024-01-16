@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guna Prediction Result</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="result-container">
+        <div class="result-message">
+            Congratulations! Here are your Guna Results:
+        </div>
+        <div class="result-details">
+            <p>Sattva: {{ prediction[0][0] }}%</p>
+            <p>Rajas: {{ prediction[0][1] }}%</p>
+            <p>Tamas: {{ prediction[0][2] }}%</p>
+        </div>
+        <div class="explanation-container">
+            <h2>Explanation:</h2>
+            <p>
+                According to the Bhagavad Gita, the three gunas—Sattva, Rajas, and Tamas—represent fundamental qualities
+                that influence human behavior and consciousness.
+            </p>
+            <h3>Sattva:</h3>
+            <p>
+                Sattva is the mode of goodness and represents purity, harmony, and virtue. Individuals dominated by Sattva
+                exhibit qualities such as wisdom, compassion, and a balanced mind. They tend to pursue spiritual growth and
+                self-realization.
+            </p>
+            <h3>Rajas:</h3>
+            <p>
+                Rajas is the mode of passion and denotes activity, desire, and restlessness. Those influenced by Rajas are
+                driven by ambition, achievement, and material pursuits. While Rajas can lead to success, it may also lead to
+                attachment and ego.
+            </p>
+            <h3>Tamas:</h3>
+            <p>
+                Tamas is the mode of ignorance and signifies inertia, lethargy, and delusion. Individuals in the grip of
+                Tamas may exhibit laziness, ignorance, and a lack of clarity. Breaking free from Tamas requires conscious
+                effort towards self-improvement.
+            </p>
+            <p>
+                Lord Krishna in the Gita advises individuals to strive for a balance of the gunas, emphasizing the cultivation
+                of Sattva for spiritual evolution.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
