@@ -1,0 +1,1 @@
+web: gunicorn Guno_meter:app
